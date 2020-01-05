@@ -35,8 +35,13 @@ namespace bomPraCachorro
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddDbContext<Contexto>(option =>
-                option.UseSqlServer(Configuration.GetConnectionString("bompracachorro")));
+            services.AddDbContext<Contexto>(option => {
+                if (Configuration.GetValue<bool>("UseSqlServer")) {
+                    option.UseSqlServer(Configuration.GetConnectionString("bompracachorro"));
+                } else {
+                    option.UseSqlite(Configuration.GetConnectionString("sqlite"));
+                }
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
